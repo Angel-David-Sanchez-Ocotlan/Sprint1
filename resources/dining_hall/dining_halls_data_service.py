@@ -2,7 +2,7 @@ from resources.abstract_base_data_service import BaseDataService
 import json
 
 
-class DiningHallDataService(BaseDataService):
+class DiningHallsDataService(BaseDataService):
 
     def __init__(self, config: dict):
         """

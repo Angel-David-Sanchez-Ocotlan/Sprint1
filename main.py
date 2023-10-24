@@ -13,11 +13,11 @@ from typing import List, Union
 import uvicorn
 
 
-from resources.students.students_resource import StudentsResource
-from resources.students.students_data_service import StudentDataService
-from resources.students.student_models import StudentModel, StudentRspModel
-from resources.schools.school_models import SchoolRspModel, SchoolModel
-from resources.schools.schools_resource import SchoolsResource
+from resources.dining_hall.dining_halls_resource import DiningHallsResource
+from resources.dining_hall.dining_halls_data_service import DiningHallsDataService
+from resources.dining_hall.dining_hall_models import DiningHallModel, DiningHallRspModel
+
+
 
 app = FastAPI()
 
@@ -32,26 +32,24 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def get_data_service():
 
     config = {
-        "data_directory": "/Users/donaldferguson/Dropbox/0-Examples/e6156-f23-template/data",
-        "data_file": "students.json"
+        "data_directory": "/Users/angelsanchez/Desktop/COMS 6156 - Cloud Computing/Sprint1/e6156-f23-template/data",
+        "data_file": "diningHall.json"
     }
 
-    ds = StudentDataService(config)
+    ds = DiningHallsDataService(config)
     return ds
 
 
-def get_student_resource():
+def get_dining_hall_resource():
     ds = get_data_service()
     config = {
         "data_service": ds
     }
-    res = StudentsResource(config)
+    res = DiningHallsResource(config)
     return res
 
 
-students_resource = get_student_resource()
-
-schools_resource = SchoolsResource(config={"students_resource": students_resource})
+students_resource = get_dining_hall_resource()
 
 
 #
@@ -64,53 +62,32 @@ async def root():
     return RedirectResponse("/static/index.html")
 
 
-@app.get("/students", response_model=List[StudentRspModel])
-async def get_students(uni: str = None, last_name: str = None, school_code: str = None):
-    """
-    Return a list of students matching a query string.
-
-    - **uni**: student's UNI
-    - **last_name**: student's last name
-    - **school_code**: student's school.
-    """
-    result = students_resource.get_students(uni, last_name, school_code)
-    return result
+@app.get("/api/dining_hall", response_model=str)
+async def get_dining_halls():
+    #result = students_resource.get_dining_halls()
+    return "List of dining halls"
 
 
-@app.get("/students/{uni}", response_model=Union[StudentRspModel, None])
-async def get_student(uni: str):
-    """
-    Return a student based on UNI.
-
-    - **uni**: student's UNI
-    """
-    result = None
-    result = students_resource.get_students(uni)
-    if len(result) == 1:
-        result = result[0]
-    else:
-        raise HTTPException(status_code=404, detail="Not found")
-
-    return result
+@app.get("/api/dining_hall/staff", response_model=str)
+async def get_dining_hall_staff():
+    return "All dining hall staff"
 
 
-@app.get("/schools", response_model=List[SchoolRspModel])
-async def get_schools():
-    """
-    Return a list of schools.
-    """
-    result = schools_resource.get_schools()
-    return result
+@app.get("/api/dining_hall/{name}/staff", response_model=str)
+async def get_dining_hall_staff_by_dining_hall(name:str):
+    return "All dining hall staff for {}".format(name)
 
+@app.get("/api/dining_hall/{name}", response_model= str)
+async def get_dining_hall_staff_by_dining_hall(name:str):
+    return "All dining hall reviews for {}".format(name)
 
-@app.get("/schools/{school_code}/students", response_model=List[StudentRspModel])
-async def get_schools_students(school_code, uni=None, last_name=None):
-    """
-    Return a list of schools.
-    """
-    result = schools_resource.get_schools_students(school_code, uni, last_name)
-    return result
+@app.get("/api/dining_hall/{name}/{menu_item}", response_model=str)
+async def get_dining_hall_staff_by_dining_hall(name:str, menu_item:str):
+    return "All dining hall reviews for menu item {} and dining hall {}".format(menu_item, name)
 
+@app.get("/api/dining_hall/{name}/{menu_item}/{review_id}", response_model=str)
+async def get_dining_hall_staff_by_dining_hall(name:str,menu_item:str, review_id:str):
+    return "Dining Hall review with id {} for menu item {} and dining hall {} ".format(review_id, menu_item, name)
 
 
 

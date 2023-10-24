@@ -7,7 +7,7 @@ def get_data_service():
 
     config = {
         "data_directory": "/Users/donaldferguson/Dropbox/0-Examples/e6156-f23-template/data",
-        "data_file": "students.json"
+        "data_file": "dining_hall.json"
     }
 
     ds = StudentDataService(config)

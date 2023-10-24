@@ -6,7 +6,7 @@ def get_data_service():
 
     config = {
         "data_directory": "/Users/donaldferguson/Dropbox/0-Examples/e6156-f23-template/data",
-        "data_file": "students.json"
+        "data_file": "dining_hall.json"
     }
 
     ds = StudentDataService(config)
@@ -17,7 +17,7 @@ def t1():
 
     ds = get_data_service()
     students = ds.get_students(school_code="SEAS")
-    print("t1: students = ", json.dumps(students, indent=2))
+    print("t1: dining_hall = ", json.dumps(students, indent=2))
 
 
 if __name__ == "__main__":

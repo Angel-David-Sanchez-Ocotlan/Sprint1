@@ -1,5 +1,5 @@
 from resources.abstract_base_resource import BaseResource
-from resources.students.student_models import DiningHallRspModel, DiningHallModel
+from resources.dining_hall.dining_hall_models import DiningHallRspModel, DiningHallModel
 from resources.rest_models import Link
 from typing import List
 
